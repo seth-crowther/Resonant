@@ -4,42 +4,51 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "BP_MusicManager.generated.h"
+#include "FightCamera.generated.h"
 
 UCLASS()
-class RESONANT_API ABP_MusicManager : public AActor
+class RESONANT_API AFightCamera : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ABP_MusicManager();
+	AFightCamera();
 
 	// Properties
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		APawn *leftChar;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		APawn *rightChar;
+
 	UPROPERTY(EditAnywhere)
-		float bpm;
+		float tweakCamDist;
+
+	UPROPERTY(EditAnywhere)
+		float tweakCamHeight;
+
+	UPROPERTY(EditAnywhere)
+		float minDistBack;
 
 	UPROPERTY(BlueprintReadWrite)
-		float playbackTime;
-
-	UPROPERTY(EditAnywhere)
-		float onBeatThreshold;
-
-	UPROPERTY(BlueprintReadOnly)
-		bool onBeat;
+		float fov;
 
 	// Functions
 	UFUNCTION()
-		bool CheckBeat();
+		float GetDistBack();
 
-	UFUNCTION(BlueprintCallable)
-		float GetNewPlayRate(UAnimMontage *attack);
+	UFUNCTION()
+		FVector GetCharMidpoint();
+
+	UFUNCTION()
+		FVector GetNewLocation();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:
+public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

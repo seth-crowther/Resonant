@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "BP_MusicManager.generated.h"
+#include "MusicManager.generated.h"
 
 UCLASS()
-class RESONANT_API ABP_MusicManager : public AActor
+class RESONANT_API AMusicManager : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ABP_MusicManager();
+	AMusicManager();
 
 	// Properties
 	UPROPERTY(EditAnywhere)
