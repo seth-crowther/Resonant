@@ -17,10 +17,10 @@ public:
 
 	// Properties
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-		APawn *leftChar;
+		APawn* leftChar;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-		APawn *rightChar;
+		APawn* rightChar;
 
 	UPROPERTY(EditAnywhere)
 		float tweakCamDist;
