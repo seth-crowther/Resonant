@@ -17,10 +17,10 @@ public:
 
 	// Properties
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-		APawn* leftChar;
+		AActor* actor1;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-		APawn* rightChar;
+		AActor* actor2;
 
 	UPROPERTY(EditAnywhere)
 		float tweakCamDist;
@@ -43,6 +43,9 @@ public:
 
 	UFUNCTION()
 		FVector GetNewLocation();
+
+	UFUNCTION(BlueprintCallable)
+		void Initialize(AActor* left, AActor* right);
 
 protected:
 	// Called when the game starts or when spawned
