@@ -11,11 +11,16 @@ AFightCamera::AFightCamera()
 
 }
 
+void AFightCamera::Initialize(AActor* left, AActor* right)
+{
+	actor1 = left;
+	actor2 = right;
+}
+
 // Called when the game starts or when spawned
 void AFightCamera::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
@@ -27,16 +32,16 @@ void AFightCamera::Tick(float DeltaTime)
 
 FVector AFightCamera::GetCharMidpoint()
 {
-	FVector leftPos = leftChar->GetActorLocation();
-	FVector rightPos = rightChar->GetActorLocation();
+	FVector leftPos = actor1->GetActorLocation();
+	FVector rightPos = actor2->GetActorLocation();
 
 	return ((leftPos + rightPos) / 2) + (FVector(0, 0, 1) * tweakCamHeight);
 }
 
 float AFightCamera::GetDistBack()
 {
-	float leftY = leftChar->GetActorLocation().Y;
-	float rightY = rightChar->GetActorLocation().Y;
+	float leftY = actor1->GetActorLocation().Y;
+	float rightY = actor2->GetActorLocation().Y;
 
 	float charDistToMidpoint = (abs(rightY - leftY) / 2) + tweakCamDist;
 
