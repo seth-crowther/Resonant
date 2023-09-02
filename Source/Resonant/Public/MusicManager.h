@@ -16,24 +16,23 @@ public:
 	AMusicManager();
 
 	// Properties
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float bpm;
 
 	UPROPERTY(BlueprintReadWrite)
 		float playbackTime;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float onBeatThreshold;
 
 	UPROPERTY(BlueprintReadOnly)
 		bool onBeat;
 
 	// Functions
-	UFUNCTION()
-		bool CheckBeat();
-
 	UFUNCTION(BlueprintCallable)
-		float GetNewPlayRate(UAnimMontage *attack);
+		float GetNewPlayRate(UAnimMontage* attack);
+
+	bool CheckBeat();
 
 protected:
 	// Called when the game starts or when spawned
