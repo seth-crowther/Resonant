@@ -30,20 +30,52 @@ void AFightCamera::Tick(float DeltaTime)
 	SetActorLocation(GetNewLocation());
 }
 
-FVector AFightCamera::GetCharMidpoint()
+FVector AFightCamera::GetCharMidpoint(AActor* first, AActor* second)
 {
-	FVector leftPos = actor1->GetActorLocation();
-	FVector rightPos = actor2->GetActorLocation();
+	FVector firstPos;
+	FVector secondPos;
 
-	return ((leftPos + rightPos) / 2) + (FVector(0, 0, 1) * tweakCamHeight);
+	if (IsValid(first) && IsValid(second)) // If both actors are valid (normal state)
+	{
+		firstPos = first->GetActorLocation();
+		secondPos = second->GetActorLocation();
+	}
+	else if (IsValid(first) != IsValid(second)) // If one actor is not valid (e.g. killed)
+	{
+		firstPos = IsValid(first) ? first->GetActorLocation() : FVector(0, -(second->GetActorLocation().Y), second->GetActorLocation().Z);
+		secondPos = IsValid(second) ? second->GetActorLocation() : FVector(0, -(first->GetActorLocation().Y), first->GetActorLocation().Z);
+	}
+	else // The off-chance that there are no actors, set a default position
+	{
+		firstPos = FVector(0, -200, 90);
+		secondPos = FVector(0, 200, 90);
+	}
+
+	return ((firstPos + secondPos) / 2) + (FVector(0, 0, 1) * tweakCamHeight);
 }
 
-float AFightCamera::GetDistBack()
+float AFightCamera::GetDistBack(AActor* first, AActor* second)
 {
-	float leftY = actor1->GetActorLocation().Y;
-	float rightY = actor2->GetActorLocation().Y;
+	float firstY;
+	float secondY;
+	
+	if (IsValid(first) && IsValid(second)) // If both actors are valid (normal state)
+	{
+		firstY = first->GetActorLocation().Y;
+		secondY = second->GetActorLocation().Y;
+	}
+	else if (IsValid(first) != IsValid(second)) // If one actor is not valid (e.g. killed)
+	{
+		firstY = IsValid(first) ? first->GetActorLocation().Y : -(second->GetActorLocation().Y);
+		secondY = IsValid(second) ? second->GetActorLocation().Y : -(first->GetActorLocation().Y);
+	}
+	else // The off-chance that there are no actors, set a default position
+	{
+		firstY = 0;
+		secondY = 0;
+	}
 
-	float charDistToMidpoint = (abs(rightY - leftY) / 2) + tweakCamDist;
+	float charDistToMidpoint = (abs(firstY - secondY) / 2) + tweakCamDist;
 
 	// Convert degrees to radians for tan function
 	return (charDistToMidpoint / tan((fov / 2) * 3.14159 / 180));
@@ -51,9 +83,9 @@ float AFightCamera::GetDistBack()
 
 FVector AFightCamera::GetNewLocation()
 {
-	FVector midpoint = GetCharMidpoint();
-	float newX = GetDistBack() < minDistBack ? minDistBack : GetDistBack();
-	FVector newLocation = FVector(-newX, GetCharMidpoint().Y, GetCharMidpoint().Z);
+	FVector midpoint = GetCharMidpoint(actor1, actor2);
+	float newX = GetDistBack(actor1, actor2) < minDistBack ? minDistBack : GetDistBack(actor1, actor2);
+	FVector newLocation = FVector(-newX, midpoint.Y, midpoint.Z);
 	return newLocation;
 }
 

@@ -36,10 +36,10 @@ public:
 
 	// Functions
 	UFUNCTION()
-		float GetDistBack();
+		float GetDistBack(AActor* first, AActor* second);
 
 	UFUNCTION()
-		FVector GetCharMidpoint();
+		FVector GetCharMidpoint(AActor* first, AActor* second);
 
 	UFUNCTION()
 		FVector GetNewLocation();
