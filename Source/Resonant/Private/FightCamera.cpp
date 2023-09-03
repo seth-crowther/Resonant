@@ -11,10 +11,10 @@ AFightCamera::AFightCamera()
 
 }
 
-void AFightCamera::Initialize(AActor* left, AActor* right)
+void AFightCamera::Initialize(AActor* first, AActor* second)
 {
-	actor1 = left;
-	actor2 = right;
+	actor1 = first;
+	actor2 = second;
 }
 
 // Called when the game starts or when spawned
