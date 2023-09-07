@@ -6,6 +6,9 @@
 #include "GameFramework/Pawn.h"
 #include "Fighter.generated.h"
 
+class UStateMachine;
+
+
 UCLASS()
 class RESONANT_API AFighter : public APawn
 {
@@ -31,6 +34,9 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 		float zSpeed;
 
+	UPROPERTY(BlueprintReadWrite)
+		UStateMachine* stateMachine;
+
 	// Constants
 	const float walkingSpeed = 100;
 	const float gravity = -800;
@@ -41,6 +47,18 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		void HandleAirborneMovement(float deltaTime);
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+		void Dodge();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+		void Parry();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+		void Stun(float stunBeats);
+
+	void SetZSpeed(float value);
+	void SetLastHorizontalDir();
 
 protected:
 	// Called when the game starts or when spawned

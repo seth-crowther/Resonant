@@ -1,18 +1,32 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Fighter.h"
+#include "StateMachine.h"
 
 // Sets default values
 AFighter::AFighter()
 {
- 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	immobilizeHorizontal = false;
 	horizontalMoveDir = 0;
 
 	lastHorizontalDir = 0;
 	zSpeed = 0;
+	side = 0;
+
+	stateMachine = CreateDefaultSubobject<UStateMachine>(FName("fighterStateMachine"));
+	stateMachine->Initialize(this);
+}
+
+void AFighter::SetZSpeed(float value)
+{
+	zSpeed = value;
+}
+
+void AFighter::SetLastHorizontalDir()
+{
+	lastHorizontalDir = horizontalMoveDir;
+	horizontalMoveDir = 0;
 }
 
 // Called when the game starts or when spawned
@@ -27,7 +41,6 @@ void AFighter::BeginPlay()
 void AFighter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
@@ -59,4 +72,3 @@ void AFighter::HandleAirborneMovement(float deltaTime)
 	FVector newLocation = FVector(0, curr.Y + horizontalChange, curr.Z + (deltaTime * zSpeed));
 	SetActorLocation(newLocation, true);
 }
-
