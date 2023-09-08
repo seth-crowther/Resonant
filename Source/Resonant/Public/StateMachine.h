@@ -44,7 +44,6 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 		TEnumAsByte<FighterStateName> currentStateName;
 
-
 	// Important all states are UPROPERTY so they aren't garbage collected by UE
 	UPROPERTY()
 		TScriptInterface<IFighterBaseState> currentState;
