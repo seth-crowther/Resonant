@@ -12,6 +12,7 @@
 #include "FighterParryingState.h"
 #include "FighterDodgingState.h"
 #include "FighterHitstunState.h"
+#include "FighterAttackingState.h"
 
 #include "StateMachine.generated.h"
 
@@ -26,7 +27,8 @@ enum FighterStateName
 	Jumping,
 	Parrying,
 	Dodging,
-	Hitstun
+	Hitstun,
+	Attacking
 };
 
 UCLASS(Blueprintable)
@@ -65,6 +67,9 @@ public:
 
 	UPROPERTY()
 		UFighterHitstunState* hitstunState;
+
+	UPROPERTY()
+		UFighterAttackingState* attackingState;
 
 	// Functions
 	UFUNCTION(BlueprintCallable)

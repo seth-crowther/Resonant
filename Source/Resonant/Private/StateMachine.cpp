@@ -13,6 +13,7 @@ UStateMachine::UStateMachine()
 	parryingState = CreateDefaultSubobject<UFighterParryingState>(FName("ParryingState"));
 	dodgingState = CreateDefaultSubobject<UFighterDodgingState>(FName("DodgingState"));
 	hitstunState = CreateDefaultSubobject<UFighterHitstunState>(FName("HitstunState"));
+	attackingState = CreateDefaultSubobject<UFighterAttackingState>(FName("AttackingState"));
 
 	currentState = walkingState;
 	currentStateName = GetStateName(currentState);
@@ -32,6 +33,8 @@ FighterStateName UStateMachine::GetStateName(TScriptInterface<IFighterBaseState>
 		return FighterStateName::Parrying;
 	if (state == walkingState)
 		return FighterStateName::Walking;
+	if (state == attackingState)
+		return FighterStateName::Attacking;
 	return FighterStateName::Walking;
 }
 
@@ -64,6 +67,8 @@ TScriptInterface<IFighterBaseState> UStateMachine::ParseStateName(FighterStateNa
 		return parryingState;
 	case Dodging:
 		return dodgingState;
+	case Attacking:
+		return attackingState;
 	default:
 		return walkingState;
 	}

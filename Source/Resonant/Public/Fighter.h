@@ -57,6 +57,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 		void Stun(float stunBeats);
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+		void SetCanAttack(bool value);
+
 	void SetZSpeed(float value);
 	void SetLastHorizontalDir();
 
