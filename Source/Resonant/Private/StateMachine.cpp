@@ -21,18 +21,18 @@ UStateMachine::UStateMachine()
 
 FighterStateName UStateMachine::GetStateName(TScriptInterface<IFighterBaseState> state)
 {
+	if (state == walkingState)
+		return FighterStateName::Walking;
 	if (state == crouchingState)
 		return FighterStateName::Crouching;
-	if (state == dodgingState)
-		return FighterStateName::Dodging;
-	if (state == hitstunState)
-		return FighterStateName::Hitstun;
 	if (state == jumpingState)
 		return FighterStateName::Jumping;
 	if (state == parryingState)
 		return FighterStateName::Parrying;
-	if (state == walkingState)
-		return FighterStateName::Walking;
+	if (state == dodgingState)
+		return FighterStateName::Dodging;
+	if (state == hitstunState)
+		return FighterStateName::Hitstun;
 	if (state == attackingState)
 		return FighterStateName::Attacking;
 	return FighterStateName::Walking;
@@ -67,6 +67,8 @@ TScriptInterface<IFighterBaseState> UStateMachine::ParseStateName(FighterStateNa
 		return parryingState;
 	case Dodging:
 		return dodgingState;
+	case Hitstun:
+		return hitstunState;
 	case Attacking:
 		return attackingState;
 	default:
