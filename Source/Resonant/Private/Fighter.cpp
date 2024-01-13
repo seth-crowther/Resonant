@@ -32,9 +32,9 @@ void AFighter::SetLastHorizontalDir()
 // Called when the game starts or when spawned
 void AFighter::BeginPlay()
 {
-	Super::BeginPlay();
 	// This is a bit of a hack since a collider is the fighter's root component
 	side = GetActorLocation().Y < 0 ? 1 : -1;
+	Super::BeginPlay();
 }
 
 // Called every frame
