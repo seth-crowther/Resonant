@@ -70,11 +70,11 @@ private:
 
 	CameraState currentState;
 
+	FTimerHandle changeStateDelayHandle;
+
 	FVector originalPos;
 
 	float lerpAlpha;
-
-	FTimerHandle changeStateDelayHandle;
 
 	void SwapToPanLR();
 

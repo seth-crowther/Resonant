@@ -92,6 +92,7 @@ FVector AFightCamera::GetNewLocation(CameraState target, float DeltaTime)
 	FVector nextPos;
 	FVector midpoint;
 	float newX;
+	float smoothedLerpAlpha;
 
 	switch (target)
 	{
@@ -101,13 +102,14 @@ FVector AFightCamera::GetNewLocation(CameraState target, float DeltaTime)
 		case PanningLR:
 			// Logic for interpolating to right fighter
 			lerpAlpha += DeltaTime / PANSECONDS;
+			smoothedLerpAlpha = FMath::SmoothStep((float)0, (float)1, lerpAlpha);
 
 			// Interpolate position
 			destPos = GetNewLocation(RightIntro, 0);
-			nextPos = FMath::Lerp(originalPos, destPos, lerpAlpha);
+			nextPos = FMath::Lerp(originalPos, destPos, smoothedLerpAlpha);
 
 			// Interpolate rotation
-			SetActorRotation(FQuat(FMath::Lerp(FRotator(0, -30, 0), FRotator(0, 30, 0), lerpAlpha)));
+			SetActorRotation(FQuat(FMath::Lerp(FRotator(0, -30, 0), FRotator(0, 30, 0), smoothedLerpAlpha)));
 
 			return nextPos;
 
@@ -118,13 +120,14 @@ FVector AFightCamera::GetNewLocation(CameraState target, float DeltaTime)
 		case PanningRM:
 			// Logic for interpolating to start of gameplay
 			lerpAlpha += DeltaTime / PANSECONDS;
+			smoothedLerpAlpha = FMath::SmoothStep((float)0, (float)1, lerpAlpha);
 
 			// Interpolate position
 			destPos = GetNewLocation(Gameplay, 0);
-			nextPos = FMath::Lerp(originalPos, destPos, lerpAlpha);
+			nextPos = FMath::Lerp(originalPos, destPos, smoothedLerpAlpha);
 
 			// Interpolate rotation
-			SetActorRotation(FQuat(FMath::Lerp(FRotator(0, 30, 0), FRotator(0, 0, 0), lerpAlpha)));
+			SetActorRotation(FQuat(FMath::Lerp(FRotator(0, 30, 0), FRotator(0, 0, 0), smoothedLerpAlpha)));
 
 			return nextPos;
 
