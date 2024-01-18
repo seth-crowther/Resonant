@@ -72,3 +72,9 @@ void AFighter::HandleAirborneMovement(float deltaTime)
 	FVector newLocation = FVector(0, curr.Y + horizontalChange, curr.Z + (deltaTime * zSpeed));
 	SetActorLocation(newLocation, true);
 }
+
+void AFighter::PlayIntro()
+{
+	PlayIntroAnimation();
+	horizontalMoveDir = side;
+}

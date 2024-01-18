@@ -4,7 +4,19 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Kismet/GameplayStatics.h"
+#include "Engine.h"
+#include "Fighter.h"
 #include "FightCamera.generated.h"
+
+UENUM()
+enum CameraState {
+	LeftIntro,
+	PanningLR,
+	RightIntro,
+	PanningRM,
+	Gameplay
+};
 
 UCLASS()
 class RESONANT_API AFightCamera : public AActor
@@ -17,10 +29,10 @@ public:
 
 	// Properties
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-		AActor* actor1;
+		AFighter* actor1;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-		AActor* actor2;
+		AFighter* actor2;
 
 	UPROPERTY(EditAnywhere)
 		float tweakCamDist;
@@ -36,23 +48,39 @@ public:
 
 	// Functions
 	UFUNCTION()
-		float GetDistBack(AActor* first, AActor* second);
+		float GetDistBack(AFighter* first, AFighter* second);
 
 	UFUNCTION()
-		FVector GetCharMidpoint(AActor* first, AActor* second);
+		FVector GetCharMidpoint(AFighter* first, AFighter* second);
 
 	UFUNCTION()
-		FVector GetNewLocation();
+		FVector GetNewLocation(CameraState target, float DeltaTime);
 
 	UFUNCTION(BlueprintCallable)
-		void Initialize(AActor* left, AActor* right);
+		void Initialize(AFighter* left, AFighter* right);
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+protected:
+	virtual void BeginPlay() override;
+
+private:
+	// Determines behaviour of camera e.g. playing intros or moving automatically
+	bool gameplayBegun = false;
+
+	CameraState currentState;
+
+	FVector originalPos;
+
+	float lerpAlpha;
+
+	FTimerHandle changeStateDelayHandle;
+
+	void SwapToPanLR();
+
+	void SwapToRightIntro();
+
+	void SwapToPanRM();
+
+	void SwapToGameplay();
 };

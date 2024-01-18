@@ -60,8 +60,12 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 		void SetCanAttack(bool value);
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+		void PlayIntroAnimation();
+
 	void SetZSpeed(float value);
 	void SetLastHorizontalDir();
+	void PlayIntro();
 
 protected:
 	// Called when the game starts or when spawned
