@@ -63,6 +63,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 		void PlayIntroAnimation();
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+		void AllowInput();
+
 	void SetZSpeed(float value);
 	void SetLastHorizontalDir();
 	void PlayIntro();

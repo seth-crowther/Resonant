@@ -172,5 +172,10 @@ void AFightCamera::SwapToGameplay()
 {
 	GetWorldTimerManager().ClearTimer(changeStateDelayHandle);
 	actor2->horizontalMoveDir = 0;
+
+	// Allows input to affect Fighters only after intro is complete
+	actor1->AllowInput();
+	actor2->AllowInput();
+
 	currentState = Gameplay;
 }
