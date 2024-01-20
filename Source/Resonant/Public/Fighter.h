@@ -58,6 +58,9 @@ public:
 		void Stun(float stunBeats);
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+		void Die();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 		void SetCanAttack(bool value);
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
