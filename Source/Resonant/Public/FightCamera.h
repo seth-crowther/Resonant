@@ -65,9 +65,6 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	// Determines behaviour of camera e.g. playing intros or moving automatically
-	bool gameplayBegun = false;
-
 	CameraState currentState;
 
 	FTimerHandle changeStateDelayHandle;

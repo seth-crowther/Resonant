@@ -2,7 +2,12 @@
 
 #include "FightCamera.h"
 #define INTROTIME 3
-#define PANSECONDS 1
+#define PANTIME 1
+
+#define INTROCAMANGLE 30
+#define INTROCAMDISTX 180
+#define INTROCAMDISTY 240
+#define INTROCAMDISTZ 30
 
 // Sets default values
 AFightCamera::AFightCamera()
@@ -97,11 +102,11 @@ FVector AFightCamera::GetNewLocation(CameraState target, float DeltaTime)
 	switch (target)
 	{
 		case LeftIntro:
-			return actor1->GetActorLocation() + FVector(-180, 160, 30);
+			return actor1->GetActorLocation() + FVector(-INTROCAMDISTX, INTROCAMDISTY, INTROCAMDISTZ);
 
 		case PanningLR:
 			// Logic for interpolating to right fighter
-			lerpAlpha += DeltaTime / PANSECONDS;
+			lerpAlpha += DeltaTime / PANTIME;
 			smoothedLerpAlpha = FMath::SmoothStep((float)0, (float)1, lerpAlpha);
 
 			// Interpolate position
@@ -109,17 +114,16 @@ FVector AFightCamera::GetNewLocation(CameraState target, float DeltaTime)
 			nextPos = FMath::Lerp(originalPos, destPos, smoothedLerpAlpha);
 
 			// Interpolate rotation
-			SetActorRotation(FQuat(FMath::Lerp(FRotator(0, -30, 0), FRotator(0, 30, 0), smoothedLerpAlpha)));
+			SetActorRotation(FQuat(FMath::Lerp(FRotator(0, -INTROCAMANGLE, 0), FRotator(0, INTROCAMANGLE, 0), smoothedLerpAlpha)));
 
 			return nextPos;
 
 		case RightIntro:
-			SetActorRotation(FQuat(FRotator(0, 30, 0)));
-			return actor2->GetActorLocation() + FVector(-180, -160, 30);
+			return actor2->GetActorLocation() + FVector(-INTROCAMDISTX, -INTROCAMDISTY, INTROCAMDISTZ);
 
 		case PanningRM:
 			// Logic for interpolating to start of gameplay
-			lerpAlpha += DeltaTime / PANSECONDS;
+			lerpAlpha += DeltaTime / PANTIME;
 			smoothedLerpAlpha = FMath::SmoothStep((float)0, (float)1, lerpAlpha);
 
 			// Interpolate position
@@ -148,13 +152,13 @@ void AFightCamera::SwapToPanLR()
 	originalPos = GetActorLocation();
 	actor2->PlayIntro();
 	currentState = PanningLR;
-	GetWorldTimerManager().SetTimer(changeStateDelayHandle, this, &AFightCamera::SwapToRightIntro, PANSECONDS, false);
+	GetWorldTimerManager().SetTimer(changeStateDelayHandle, this, &AFightCamera::SwapToRightIntro, PANTIME, false);
 }
 
 void AFightCamera::SwapToRightIntro()
 {
+	SetActorRotation(FQuat(FRotator(0, INTROCAMANGLE, 0)));
 	GetWorldTimerManager().ClearTimer(changeStateDelayHandle);
-	actor1->horizontalMoveDir = 0;
 	currentState = RightIntro;
 	GetWorldTimerManager().SetTimer(changeStateDelayHandle, this, &AFightCamera::SwapToPanRM, INTROTIME, false);
 }
@@ -165,17 +169,16 @@ void AFightCamera::SwapToPanRM()
 	lerpAlpha = 0;
 	originalPos = GetActorLocation();
 	currentState = PanningRM;
-	GetWorldTimerManager().SetTimer(changeStateDelayHandle, this, &AFightCamera::SwapToGameplay, PANSECONDS, false);
+	GetWorldTimerManager().SetTimer(changeStateDelayHandle, this, &AFightCamera::SwapToGameplay, PANTIME, false);
 }
 
 void AFightCamera::SwapToGameplay()
 {
 	GetWorldTimerManager().ClearTimer(changeStateDelayHandle);
-	actor2->horizontalMoveDir = 0;
 
 	// Allows input to affect Fighters only after intro is complete
-	actor1->AllowInput();
-	actor2->AllowInput();
+	actor1->StartGameplay();
+	actor2->StartGameplay();
 
 	currentState = Gameplay;
 }
