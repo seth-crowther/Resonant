@@ -28,7 +28,7 @@ void AFightCamera::Initialize(AFighter* first, AFighter* second)
 	actor2 = second;
 
 	currentState = LeftIntro;
-	SetActorRotation(FQuat(FRotator(0, -30, 0)));
+	SetActorRotation(FQuat(FRotator(0, -INTROCAMANGLE, 0)));
 	actor1->PlayIntro();
 	GetWorldTimerManager().SetTimer(changeStateDelayHandle, this, &AFightCamera::SwapToPanLR, INTROTIME, false);
 }
@@ -140,6 +140,32 @@ FVector AFightCamera::GetNewLocation(CameraState target, float DeltaTime)
 			newX = GetDistBack(actor1, actor2) < minDistBack ? minDistBack : GetDistBack(actor1, actor2);
 			SetActorRotation(FQuat(FRotator(0, 0, 0)));
 			return FVector(-newX, midpoint.Y, midpoint.Z);
+
+		case PanningML:
+			// Logic for interpolating to right fighter
+			lerpAlpha += DeltaTime / PANTIME;
+			smoothedLerpAlpha = FMath::SmoothStep((float)0, (float)1, lerpAlpha);
+
+			// Interpolate position
+			destPos = GetNewLocation(LeftIntro, 0);
+			nextPos = FMath::Lerp(originalPos, destPos, smoothedLerpAlpha);
+
+			// Interpolate rotation
+			SetActorRotation(FQuat(FMath::Lerp(FRotator(0, 0, 0), FRotator(0, -INTROCAMANGLE, 0), smoothedLerpAlpha)));
+
+			return nextPos;
+
+		case PanningMR:
+			// Logic for interpolating to right fighter
+			lerpAlpha += DeltaTime / PANTIME;
+			smoothedLerpAlpha = FMath::SmoothStep((float)0, (float)1, lerpAlpha);
+
+			// Interpolate position
+			destPos = GetNewLocation(RightIntro, 0);
+			nextPos = FMath::Lerp(originalPos, destPos, smoothedLerpAlpha);
+
+			// Interpolate rotation
+			SetActorRotation(FQuat(FMath::Lerp(FRotator(0, 0, 0), FRotator(0, INTROCAMANGLE, 0), smoothedLerpAlpha)));
 	}
 
 	return FVector(0, 0, 0);
@@ -181,4 +207,18 @@ void AFightCamera::SwapToGameplay()
 	actor2->StartGameplay();
 
 	currentState = Gameplay;
+}
+
+void AFightCamera::LeftPlayerWin()
+{
+	lerpAlpha = 0;
+	originalPos = GetActorLocation();
+	currentState = PanningML;
+}
+
+void AFightCamera::RightPlayerWin()
+{
+	lerpAlpha = 0;
+	originalPos = GetActorLocation();
+	currentState = PanningMR;
 }

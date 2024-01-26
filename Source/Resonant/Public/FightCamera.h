@@ -15,7 +15,9 @@ enum CameraState {
 	PanningLR,
 	RightIntro,
 	PanningRM,
-	Gameplay
+	Gameplay,
+	PanningML,
+	PanningMR
 };
 
 UCLASS()
@@ -58,6 +60,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		void Initialize(AFighter* left, AFighter* right);
+
+	UFUNCTION(BlueprintCallable)
+		void LeftPlayerWin();
+
+	UFUNCTION(BlueprintCallable)
+		void RightPlayerWin();
 
 	virtual void Tick(float DeltaTime) override;
 
